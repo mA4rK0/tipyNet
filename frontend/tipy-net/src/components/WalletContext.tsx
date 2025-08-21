@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useMemo } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Wallet } from "@solana/wallet-adapter-react";
 
 interface WalletContextType {
   connected: boolean;
@@ -15,13 +14,7 @@ const WalletContext = createContext<WalletContextType>({
 
 export const useWalletContext = () => useContext(WalletContext);
 
-export const WalletProvider = ({
-  children,
-  wallets,
-}: {
-  children: React.ReactNode;
-  wallets: Wallet[];
-}) => {
+export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const { connected, publicKey } = useWallet();
 
   const value = useMemo(

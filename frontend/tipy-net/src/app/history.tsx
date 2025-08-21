@@ -2,7 +2,6 @@ import Head from "next/head";
 import Link from "next/link";
 import WalletConnector from "../components/WalletConnector";
 import TransactionHistory from "../components/TransactionHistory";
-import { WalletProvider } from "../components/WalletContext";
 import { ConnectionProvider } from "@solana/wallet-adapter-react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { clusterApiUrl } from "@solana/web3.js";
@@ -15,34 +14,32 @@ export default function HistoryPage() {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
-  <ConnectionProvider endpoint={endpoint}>
-    <WalletProvider wallets={wallets}>
+  return (
+    <ConnectionProvider endpoint={endpoint}>
       <WalletModalProvider>
-        <WalletProvider wallets={wallets}>
-          <div className="container">
-            <Head>
-              <title>Tipy - Transaction History</title>
-            </Head>
+        <div className="container">
+          <Head>
+            <title>Tipy - Transaction History</title>
+          </Head>
 
-            <header>
-              <h1>Tipy Transaction History</h1>
-              <WalletConnector />
-              <nav>
-                <Link href="/">Send Tip</Link>
-                <Link href="/history">History</Link>
-              </nav>
-            </header>
+          <header>
+            <h1>Tipy Transaction History</h1>
+            <WalletConnector />
+            <nav>
+              <Link href="/">Send Tip</Link>
+              <Link href="/history">History</Link>
+            </nav>
+          </header>
 
-            <main>
-              <TransactionHistory
-                transactions={[]}
-                loading={false}
-                onRefresh={() => {}}
-              />
-            </main>
-          </div>
-        </WalletProvider>
+          <main>
+            <TransactionHistory
+              transactions={[]}
+              loading={false}
+              onRefresh={() => {}}
+            />
+          </main>
+        </div>
       </WalletModalProvider>
-    </WalletProvider>
-  </ConnectionProvider>;
+    </ConnectionProvider>
+  );
 }
