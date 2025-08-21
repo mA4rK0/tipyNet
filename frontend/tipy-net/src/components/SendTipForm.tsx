@@ -74,9 +74,11 @@ export default function SendTipForm({
       } else {
         setStatus(`Error: ${result.error}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Transaction error:", error);
-      setStatus(`Error: ${error.message}`);
+      setStatus(
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     } finally {
       setSending(false);
     }

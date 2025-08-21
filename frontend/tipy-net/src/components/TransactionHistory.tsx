@@ -90,7 +90,7 @@ export default function TransactionHistory({
                 {tx.message && (
                   <div className="transaction-message">
                     <p className="message-label">Message:</p>
-                    <p>"{tx.message}"</p>
+                    <p>&quot;{tx.message}&quot;</p>
                   </div>
                 )}
 

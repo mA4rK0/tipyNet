@@ -1,14 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { getDetailedTransactions } from "../utils/program";
 
+interface Transaction {
+  type: "sent" | "received";
+  amount: number;
+  counterparty: string;
+  timestamp: Date;
+  message: string;
+  isSol: boolean;
+  signature?: string;
+}
+
 export const useTransactions = () => {
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const { connection } = useConnection();
   const { publicKey } = useWallet();
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     if (!publicKey) return;
 
     setLoading(true);
@@ -42,13 +52,13 @@ export const useTransactions = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [connection, publicKey]);
 
   useEffect(() => {
     if (publicKey) {
       fetchTransactions();
     }
-  }, [publicKey]);
+  }, [publicKey, fetchTransactions]);
 
   return { transactions, loading, refetch: fetchTransactions };
 };
