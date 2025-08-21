@@ -47,7 +47,7 @@ export default function SendTipForm({
       let receiverPubkey;
       try {
         receiverPubkey = new PublicKey(receiver);
-      } catch (err) {
+      } catch {
         setStatus("Invalid receiver address");
         setSending(false);
         return;
@@ -74,11 +74,9 @@ export default function SendTipForm({
       } else {
         setStatus(`Error: ${result.error}`);
       }
-    } catch (err: unknown) {
-      console.error("Transaction error:", err);
-      setStatus(
-        `Error: ${err instanceof Error ? err.message : "Unknown error"}`
-      );
+    } catch {
+      console.error("Transaction error occurred");
+      setStatus("Error: Unknown error occurred");
     } finally {
       setSending(false);
     }

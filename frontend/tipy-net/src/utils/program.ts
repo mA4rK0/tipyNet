@@ -1,4 +1,4 @@
-import { Program, AnchorProvider, BN } from "@project-serum/anchor";
+import { Program, AnchorProvider, BN, Idl } from "@project-serum/anchor";
 import {
   PublicKey,
   Connection,
@@ -45,7 +45,7 @@ export const getProgram = (
     AnchorProvider.defaultOptions()
   );
 
-  return new Program(IDL as any, PROGRAM_ID, provider);
+  return new Program(IDL as Idl, PROGRAM_ID, provider);
 };
 
 export async function sendTip(
