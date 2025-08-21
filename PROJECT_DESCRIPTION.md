@@ -1,6 +1,6 @@
 # Project Description
 
-**Deployed Frontend URL:** [TODO: Link to your deployed frontend]
+**Deployed Frontend URL:** <https://tipy-net.vercel.app/>
 
 **Solana Program ID:** E4dEFDBfgF7vACjTRez7v4Bqk8ZUrbrryT26m6HiDWQh
 
