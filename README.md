@@ -1,93 +1,94 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/idxPpgnz)
-![School of Solana](https://github.com/Ackee-Blockchain/school-of-solana/blob/master/.banner/banner.png?raw=true)
+# Project Description
 
-## 📚Solana Program
-We are about halfway through the course, and you already have some experience with programming on Solana. It is time to create something on your own! You will be building a dApp that will serve as the culmination of everything you have learned so far. Feel free to implement whatever comes to your mind, (as long as it passes the requirements).
+**Deployed Frontend URL:** <https://tipy-net.vercel.app/>
 
-**This does not mean that the School of Solana is coming to an end just yet!** There are still several exciting lectures ahead, as well as one security related task.
+**Solana Program ID:** E4dEFDBfgF7vACjTRez7v4Bqk8ZUrbrryT26m6HiDWQh
 
-### Task details
-This task consists of two parts:
-1. **Core of your dApp**
-    - A deployed Solana program.
-2. **Frontend**
-    - A simple frontend to interact with the dApp.
+## Project Overview
 
-### Requirements
-- An Anchor program deployed on **Devnet** or **Mainnet**.
-- The Anchor program must use a PDA (Program Derived Address).
-- At least one TypeScript **test** for each Anchor program instruction. These tests should cover both **happy** and **unhappy** (intentional error-triggering) scenarios.
-- A simple **frontend** deployed using your preferred provider (for more info, check below).
-- A filled out **PROJECT_DESCRIPTION.md** file.
+### Description
 
-### Ideas
-We highly recommend starting with something simple. Take time to think through your project and work on it in iterations. Do not try to implement everything at once!
+Tipy-Net is a decentralized tipping application built on Solana that allows users to send tips in both SOL and SPL tokens with personalized messages. The platform enables seamless transactions between users while maintaining a record of all tipping interactions on-chain. Each transaction is stored with details including sender, receiver, amount, message, and timestamp, creating a transparent and verifiable tipping history.
 
-Below is a list of few ideas to get you started:
-- **Social app**
-    - Instagram
-    - Giphy
-    - Friendtech
-    - Spotify
-- **Blog**
-- **Voting** ([D21 - Janeček method](https://www.ih21.org/en/guidelines))
-- **DeFi**
-    - Crowdfunding
-    - Raffles
-    - Escrow
-    - Tipping
-    - Lending ([Save Documentation](https://docs.save.finance/))
-    - Liquid Staking ([Marinade Documentation](https://docs.marinade.finance/))
-    - Data Query with Pyth ([Pyth Documentation](https://docs.pyth.network/price-feeds))
-    - AMM ([Raydium Documentation](https://raydium.gitbook.io/raydium/))
-- **Gaming**
-    - Browser Game ([Gaming on Solana](https://solanacookbook.com/gaming/nfts-in-games.html#nfts-in-games))
+### Key Features
 
-### Deadline
-The deadline for this task is **Wednesday, August 27th, at 23:59 UTC**.
->[!CAUTION]
->Note that we will not accept submissions after the deadline.
+- **Dual Currency Support**: Send tips using either SOL or any SPL token
+- **Personalized Messages**: Attach messages up to 100 characters with each tip
+- **Transaction History**: View complete history of sent and received tips
+- **Wallet Integration**: Seamless connection with popular Solana wallets like Phantom and Solflare
+- **Real-time Updates**: Instant confirmation and update of transaction status
 
-### Submission
-There are two folders, one for the Anchor project, and one for the frontend. Push your changes to the **main** branch of **this** repository.
+### How to Use the dApp
 
->[!IMPORTANT]
->It is essential that you fill out the `PROJECT_DESCRIPTION.md` template completely and accurately. This document will be used by AI for the initial evaluation, so provide detailed information about your project, including working links, clear descriptions, and technical implementation details.
+1. **Connect Wallet** - Connect your Solana wallet using the wallet adapter
+2. **Select Recipient** - Enter the recipient's wallet address
+3. **Choose Amount** - Specify the amount to send (in SOL or tokens)
+4. **Add Message** - Optionally include a message (max 100 characters)
+5. **Send Tip** - Confirm and send the transaction
+6. **View History** - Check the history tab to see all past transactions
 
-### Evaluation
-The evaluation process is based on the **requirements**. If you meet the requirements, you pass the task!
+## Program Architecture
 
->[!NOTE]
->We have a record number of participants this season, so the first round of evaluations will be conducted by AI to verify requirements before manual review. AI can make mistakes. If you believe you fulfilled all requirements but weren't graded correctly, please create a support ticket and we will resolve the issue.
+The Tipy-Net dApp uses a structured architecture with one main account type and a core instruction for sending tips. The program leverages PDAs to create unique transaction records for each tip sent.
 
->[!CAUTION]
->We expect original work that demonstrates your understanding and creativity. While you may draw inspiration from examples covered in lessons and tasks, **direct copying is not acceptable**. If you choose to build upon an example from the School of Solana materials, you must significantly expand it with additional features, instructions, and functionality to showcase your learning progress. 
+### PDA Usage
 
-### Example Workflow
-Let's say you are going to implement the Twitter dApp as the Solana Program. Here's how the steps could look:
+The program uses Program Derived Addresses to create deterministic transaction accounts for each tip transaction.
 
-**1.** Implement Twitter dApp using the Anchor framework.
+**PDAs Used:**
 
-**2.** Test the Twitter dApp using the Anchor framework.
+- **Transaction PDA**: Derived from seeds `["tip_transaction", sender_pubkey, receiver_pubkey]` - ensures each transaction has a unique account
 
-**3.** Deploy the Twitter dApp on the Solana Devnet.
+### Program Instructions
 
-**4.** Using the create solana dapp template, implement frontend for the Twitter dApp.
+**Instructions Implemented:**
 
-**5.** Publish Frontend using [Vercel](https://vercel.com).
+- **SendTip**: Creates a new transaction account and transfers specified amount (SOL or SPL tokens) to recipient
 
-**6.** Fill out the PROJECT_DESCRIPTION.md template.
+### Account Structure
 
-**7.** Submit the Twitter dApp using GitHub Classroom.
+```rust
+#[account]
+#[derive(InitSpace)]
+pub struct DataTransaction {
+    pub sender: Pubkey,        // The wallet that sent the tip
+    pub receiver: Pubkey,      // The wallet that received the tip
+    pub amount: u64,           // Amount tipped
+    #[max_len(100)]
+    pub message: String,       // Accompanying message
+    pub timestamp: i64,        // Unix timestamp when tip was sent
+    pub is_sol: bool,          // Whether the tip was in SOL or SPL tokens
+}
+```
 
-### Useful Links
-- [Vercel](https://vercel.com)
-- [Create Solana Dapp](https://github.com/solana-foundation/create-solana-dapp)
-- [Account Macro Constraints](https://docs.rs/anchor-lang/latest/anchor_lang/derive.Accounts.html#constraints)
-- [Solana Developers Courses](https://solana.com/developers/courses)
+## Testing
 
------
+### Test Coverage
 
-### Need help?
->[!TIP]
->If you have any questions, feel free to reach out to us on [Discord](https://discord.gg/z3JVuZyFnp).
+Comprehensive test suite covering transaction functionality with both SOL and SPL tokens, including extensive error handling.
+
+**Happy Path Tests:**
+
+- **SOL Transfer**: Successfully sends SOL with message and verifies transaction account
+- **SPL Token Transfer**: Successfully sends SPL tokens with message and verifies token balances
+- **Transaction Account Creation**: Properly creates and initializes transaction accounts
+
+**Unhappy Path Tests:**
+
+- **Message Too Long**: Fails when message exceeds 100 characters (MessageTooLong error)
+- **Insufficient Funds**: Fails when sender has insufficient SOL balance
+- **Invalid Token Account**: Fails when token accounts have wrong mint (InvalidTokenAccount error)
+- **Token Account Validation**: Properly validates both sender and receiver token accounts
+
+### Running Tests
+
+```bash
+yarn install    # install dependencies
+anchor test     # run tests
+```
+
+### Additional Notes for Evaluators
+
+This is a fully functional tipping dApp with support for both SOL and SPL tokens. The test suite is comprehensive and covers both success and failure scenarios. The program includes proper error handling for common scenarios like insufficient funds, invalid token accounts, and message length validation. The implementation demonstrates understanding of PDAs, token program integration, and transaction processing on Solana.
+
+The frontend features a modern neon-themed UI with responsive design and transaction history caching. The biggest challenges were handling both SOL and SPL token transfers in a single instruction and properly validating token accounts, which have been thoroughly tested in the test suite.
